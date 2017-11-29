@@ -1,0 +1,19 @@
+{
+  "name": "getremoteip",
+  "version": "1.0.0",
+  "description": "ipアドレスとホスト名をjson形式で出力します．",
+  "main": "getIP.js",
+  "scripts": {
+    "start": "node getIP.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shigeokitamura/GetRemoteIP.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shigeokitamura/GetRemoteIP/issues"
+  },
+  "homepage": "https://github.com/shigeokitamura/GetRemoteIP#readme"
+}

@@ -41,8 +41,7 @@ var server = http.createServer(
       response.write(jsonString);
       response.end();
     });
-
-  };
+  }
 ).listen(process.env.PORT, function(){
   console.log("This app is listening on port " + server.address().port);
 });
