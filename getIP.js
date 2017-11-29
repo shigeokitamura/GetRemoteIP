@@ -23,23 +23,23 @@ var server = http.createServer(
     var ip = getIP(request);
     //console.log(ip);
     dns.reverse(ip, function(err, domains) {
-        if(err) {
-            console.log(err.toString());
-            domains = "";
-        }
-        //console.log(domains);
+      if(err) {
+        console.log(err.toString());
+        domains = "";
+      }
+      //console.log(domains);
 
-        var jsonData = {
-            "ip"   : ip,
-            "host" : domains.toString(),
-            "time" : new Date()
-        };
+      var jsonData = {
+        "ip"   : ip,
+        "host" : domains.toString(),
+        "time" : new Date()
+      };
 
-        var jsonString = JSON.stringify(jsonData);
+      var jsonString = JSON.stringify(jsonData);
 
-        response.writeHead(200, {"Content-Type": "application/json"});
-        response.write(jsonString);
-        response.end();
+      response.writeHead(200, {"Content-Type": "application/json"});
+      response.write(jsonString);
+      response.end();
     });
 
   };
