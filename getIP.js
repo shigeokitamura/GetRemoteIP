@@ -3,6 +3,7 @@ var http = require("http");
 var dns = require("dns");
 
 var getIP = function (req) {
+  //console.log(req);
   if (req.headers['x-forwarded-for']) {
     return req.headers['x-forwarded-for'];
   }
@@ -20,28 +21,35 @@ var getIP = function (req) {
 
 var server = http.createServer(
   function (request, response) {
-    var ip = getIP(request);
-    //console.log(ip);
-    dns.reverse(ip, function(err, domains) {
-      if(err) {
-        console.log(err.toString());
-        domains = "";
-      }
-      //console.log(domains);
+    var ip = getIP(request).split(",");
+    console.log(ip[0]);
+    try {
+      dns.reverse(ip[0], function(err, domains) {
+        if(err) {
+          console.log(err.toString());
+          domains = ip[0];
+        }
+        //console.log(domains);
 
-      var jsonData = {
-        "ip"   : ip,
-        "host" : domains.toString(),
-        "time" : new Date()
-      };
+        var jsonData = {
+          "ip"   : ip[0],
+          "host" : domains.toString(),
+          "time" : new Date()
+        };
 
-      var jsonString = JSON.stringify(jsonData);
+        var jsonString = JSON.stringify(jsonData);
 
-      response.writeHead(200, {"Content-Type": "application/json"});
-      response.write(jsonString);
-      response.end();
-    });
+        response.writeHead(200, {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin":"*"
+        });
+        response.write(jsonString);
+        response.end();
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 ).listen(process.env.PORT, function(){
-  console.log("This app is listening on port " + server.address().port);
+  console.log("This app is listening on port" + server.address().port);
 });
