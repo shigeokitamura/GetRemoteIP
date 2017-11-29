@@ -18,28 +18,31 @@ var getIP = function (req) {
   return '0.0.0.0';
 };
 
-var getHost = function(ip) {
-    var host =  dns.reverse(ip, function(err, domains) {
-        if (err) {
-            return err.toString();
-        }
-        return domains.toString();
-    });
-    return host;
-};
-
 var server = http.createServer(
   function (request, response) {
     var ip = getIP(request);
-    console.log(ip);
-    // dns.reverse(ip, function(err, domains) {
-    //     if(err) {
-    //         console.log(err.toString());
-    //     }
-    //     console.log(domains);
-    // });
-    response.writeHead(200, {"Content-Type": "text/plain"});
-    response.end();
+    //console.log(ip);
+    dns.reverse(ip, function(err, domains) {
+        if(err) {
+            console.log(err.toString());
+            domains = "";
+        }
+        //console.log(domains);
 
-  }
-).listen(3000);
+        var jsonData = {
+            "ip"   : ip,
+            "host" : domains.toString(),
+            "time" : new Date()
+        };
+
+        var jsonString = JSON.stringify(jsonData);
+
+        response.writeHead(200, {"Content-Type": "application/json"});
+        response.write(jsonString);
+        response.end();
+    });
+
+  };
+).listen(process.env.PORT, function(){
+  console.log("This app is listening on port " + server.address().port);
+});
